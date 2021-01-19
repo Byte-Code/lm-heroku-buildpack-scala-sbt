@@ -1,23 +1,10 @@
-#!/usr/bin/env bash
-# bin/release <build-dir>
+#!/usr/bin/env sh
+# Usage
+# bin/release BUILD_DIR
+# BUILD_DIR=$1
 
-BP_DIR=$(cd $(dirname $0)/..; pwd)
-. $BP_DIR/lib/common.sh
-
-BUILD_DIR=$1
-
-cat <<EOF
----
-addons:
-  - heroku-postgresql
-
-EOF
-if [ ! -f $BUILD_DIR/Procfile ]; then
-  if uses_universal_packaging $BUILD_DIR; then
-    echo "default_process_types:"
-    echo "  $(universal_packaging_default_web_proc $BUILD_DIR)"
-  elif is_play $BUILD_DIR; then
-    echo "default_process_types:"
-    echo "  web: target/start -Dhttp.port=\$PORT \$JAVA_OPTS"
-  fi
-fi
+cd $1
+unzip -qq target/universal/$SBT_PROJECT_NAME.zip -d target/universal/
+chmod +x target/universal/bin/$SBT_PROJECT_NAME
+echo "default_process_types:"
+echo "  web: target/universal/bin/${SBT_PROJECT_NAME} -Dhttp.port=${PORT} ${JAVA_OPTS}"
