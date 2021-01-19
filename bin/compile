@@ -11,8 +11,10 @@ if [ `ls $HOME/cache/sbt/bin/sbt 2>/dev/null` ]; then
 else
   # Consider to get SBT version from $1/project/build.properties instead of SBT_URL environment
   echo "     SBT is not cached. Start download";
-  SBT_VERSION=$(cat $1/project/build.properties | grep sbt.version | cut -d= -f2)
-  SBT_URL="https://github.com/sbt/sbt/releases/download/v$SBT_VERSION/sbt-$SBT_VERSION.zip"
+  SBT_VERSION=$(cat $1/project/build.properties | grep sbt.version | cut -d= -f2);
+  SBT_URL="https://github.com/sbt/sbt/releases/download/v$SBT_VERSION/sbt-$SBT_VERSION.zip";
+  echo "     SBT version: $SBT_VERSION";
+  echo "     SBT url: $SBT_URL";
   wget -v $SBT_URL -O $HOME/cache/sbt.zip;
   echo "     unzip sbt.zip to $HOME/cache";
   unzip -qq $HOME/cache/sbt.zip -d $HOME/cache;
