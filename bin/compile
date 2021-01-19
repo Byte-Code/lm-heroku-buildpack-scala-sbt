@@ -6,7 +6,7 @@
 # Compile SBT project
 # Check if SBT dependencies are cached. If not, download them.
 echo "-----> SBT dependency check"
-if [[ `ls $HOME/cache/sbt/bin/sbt 2>/dev/null` ]]; then
+if [ `ls $HOME/cache/sbt/bin/sbt 2>/dev/null` ]; then
   echo "     SBT is cached. Skip download.";
 else
   # Consider to get SBT version from $1/project/build.properties instead of SBT_URL environment
