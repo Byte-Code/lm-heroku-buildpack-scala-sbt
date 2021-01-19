@@ -11,6 +11,8 @@ if [[ `ls $HOME/cache/sbt/bin/sbt 2>/dev/null` ]]; then
 else
   # Consider to get SBT version from $1/project/build.properties instead of SBT_URL environment
   echo "     SBT is not cached. Start download";
+  SBT_VERSION=$(cat $1/project/build.properties | grep sbt.version | cut -d= -f2)
+  SBT_URL="https://github.com/sbt/sbt/releases/download/v$SBT_VERSION/sbt-$SBT_VERSION.zip"
   wget --quiet $SBT_URL -O $HOME/cache/sbt.zip;
   echo "     unzip sbt.zip to $HOME/cache";
   unzip -qq $HOME/cache/sbt.zip -d $HOME/cache;
@@ -18,6 +20,8 @@ else
   mkdir -p $HOME/cache/.ivy/local;
   echo "     copy sbt libs to $HOME/cache/.ivy/local";
   cp -r $HOME/cache/sbt/lib/local-preloaded/* $HOME/cache/.ivy/local;
+  echo "     add sbt to PATH";
+  export PATH=$HOME/cache/sbt/bin/sbt:$PATH;
   echo "     delete $HOME/cache/sbt.zip";
   rm -rf $HOME/cache/sbt.zip;
 fi
@@ -27,7 +31,7 @@ fi
 echo "-----> Compile SBT project for release"
 cd $1
 echo "       Run tests"
-sbt -ivy $HOME/cache/.ivy clean test
+$HOME/cache/sbt -ivy $HOME/cache/.ivy clean test
 echo "       Create dist for release"
 sbt -ivy $HOME/cache/.ivy dist
 
