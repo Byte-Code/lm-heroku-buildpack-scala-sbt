@@ -26,8 +26,10 @@ fi
 # We are ready to build. Change into SBT project directory
 echo "-----> Compile SBT project for release"
 cd $1
-echo "       Create SBT dist for release"
-sbt -ivy .ivy dist
+echo "       Run tests"
+sbt -ivy $HOME/cache/.ivy clean test
+echo "       Create dist for release"
+sbt -ivy $HOME/cache/.ivy dist
 
 
 
